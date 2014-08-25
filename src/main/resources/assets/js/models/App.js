@@ -248,10 +248,14 @@ define([
       }
 
       if (!attrs.constraints.every(isValidConstraint)) {
-        errors.push(new ValidationError("constraints",
-          "Invalid constraints format or operator. Supported operators are " +
-          VALID_CONSTRAINTS.map(function(c) { return "`" + c + "`" }).join(", ") +
-          ". See https://github.com/mesosphere/marathon/wiki/Constraints.")
+        errors.push(
+          new ValidationError("constraints",
+            "Invalid constraints format or operator. Supported operators are " +
+            VALID_CONSTRAINTS.map(function(c) {
+              return "`" + c + "`";
+            }).join(", ") +
+            ". See https://github.com/mesosphere/marathon/wiki/Constraints."
+          )
         );
       }
 
