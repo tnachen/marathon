@@ -15,6 +15,7 @@ define([
   var DEFAULT_HEALTH_MSG = "Unknown";
   var EDITABLE_ATTRIBUTES = ["cmd", "constraints", "container", "cpus", "env",
     "executor", "id", "instances", "mem", "disk", "ports", "uris"];
+  var UPDATEABLE_ATTRIBUTES = ["instances", "tasksRunning", "tasksStaged"];
 
   // Matches the command executor, like "//cmd", and custom executors starting
   // with or without a "/" but never two "//", like "/custom/exec". Double slash
@@ -139,6 +140,20 @@ define([
       }
 
       return data;
+    },
+
+    /* Updates only those attributes listed in `UPDATEABLE_ATTRIBUTES` to prevent
+     * showing values that cannot be changed.
+     */
+    update: function(attrs) {
+
+      var filteredAttributes = _.filter(UPDATEABLE_ATTRIBUTES, function(attr) {
+        return attrs[attr] != null;
+      });
+
+      var allowedAttrs = _.pick(attrs, filteredAttributes);
+
+      this.set(allowedAttrs);
     },
 
     /* Sends only those attributes listed in `EDITABLE_ATTRIBUTES` to prevent
