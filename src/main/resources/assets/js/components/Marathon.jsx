@@ -132,7 +132,9 @@ define([
     handleModalDestroy: function() {
       this.setState({
         activeApp: null,
-        modalClass: null
+        modalClass: null,
+        tasksFetchState: STATES.STATE_LOADING,
+        appVersionsFetchState: STATES.STATE_LOADING
       });
     },
 
