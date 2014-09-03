@@ -27,7 +27,7 @@ define([
         collection: new AppCollection(),
         fetchState: States.STATE_LOADING,
         modalClass: null,
-        tasksFetchState: States.STATE_LOADING,
+        tasksFetchState: States.STATE_LOADING
       };
     },
 
@@ -261,6 +261,7 @@ define([
         return;
       }
 
+      this.fetchTasks();
       this.setState({
         activeApp: app,
         modalClass: AppModalComponent
@@ -282,7 +283,6 @@ define([
       if (this.state.modalClass !== null) {
         /* jshint trailing:false, quotmark:false, newcap:false */
         if (this.state.modalClass === AppModalComponent) {
-          this.fetchTasks();
           modal = (
             <AppModalComponent
               activeTask={this.state.activeTask}
