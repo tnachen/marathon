@@ -14,7 +14,8 @@ import mesosphere.marathon.state.Container.{ Docker, Volume }
 import mesosphere.marathon.state._
 import mesosphere.marathon.tasks.MarathonTasks
 import mesosphere.marathon.upgrade._
-import org.apache.mesos.Protos.ContainerInfo.DockerInfo
+import org.apache.mesos.Protos.ContainerInfo
+import org.apache.mesos.Protos.ContainerInfo.{ DockerInfo }
 import org.apache.mesos.{ Protos => mesos }
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
@@ -229,11 +230,41 @@ trait ContainerFormats {
   implicit lazy val ContainerTypeFormat: Format[mesos.ContainerInfo.Type] =
     enumFormat(mesos.ContainerInfo.Type.valueOf, str => s"$str is not a valid container type")
 
+  implicit lazy val MesosInfoFormat: Format[mesos.ContainerInfo.MesosInfo] = new Format[mesos.ContainerInfo.MesosInfo] {
+    override def writes(mesosInfo: mesos.ContainerInfo.MesosInfo): JsValue = {
+      val image = mesosInfo.getImage()
+      var imageJson = Json.obj(
+        "type" -> image.getType.toString.toUpperCase())
+      // TODO: Add appc support
+      if (image.hasDocker) {
+        imageJson = imageJson + ("docker" -> Json.obj("name" -> image.getDocker.getName))
+      }
+      Json.obj("image" -> imageJson)
+    }
+
+    override def reads(json: JsValue): JsResult[mesos.ContainerInfo.MesosInfo] = {
+      json.validate[JsObject] map { obj =>
+        val imageObj = (obj \ "image").get.as[JsObject]
+        val builder = mesos.ContainerInfo.MesosInfo.newBuilder()
+        val imageType = (imageObj \ "type").get.as[JsString].value.toUpperCase
+        val imageBuilder = mesos.Image.newBuilder()
+        if (imageType == "DOCKER") {
+          imageBuilder.setType(mesos.Image.Type.DOCKER)
+          val dockerBuilder = mesos.Image.Docker.newBuilder()
+          dockerBuilder.setName(((imageObj \ "docker").as[JsObject] \ "name").as[JsString].value)
+          imageBuilder.setDocker(dockerBuilder.build())
+        }
+        builder.setImage(imageBuilder.build()).build()
+      }
+    }
+  }
+
   implicit lazy val ContainerFormat: Format[Container] = (
     (__ \ "type").formatNullable[mesos.ContainerInfo.Type].withDefault(mesos.ContainerInfo.Type.DOCKER) ~
     (__ \ "volumes").formatNullable[Seq[Volume]].withDefault(Nil) ~
-    (__ \ "docker").formatNullable[Docker]
-  )(Container(_, _, _), unlift(Container.unapply))
+    (__ \ "docker").formatNullable[Docker] ~
+    (__ \ "mesos").formatNullable[mesos.ContainerInfo.MesosInfo]
+  )(Container(_, _, _, _), unlift(Container.unapply))
 }
 
 trait IpAddressFormats {

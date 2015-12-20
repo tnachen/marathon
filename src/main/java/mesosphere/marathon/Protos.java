@@ -13723,6 +13723,20 @@ public final class Protos {
      * <code>optional .mesosphere.marathon.ExtendedContainerInfo.DockerInfo docker = 3;</code>
      */
     mesosphere.marathon.Protos.ExtendedContainerInfo.DockerInfoOrBuilder getDockerOrBuilder();
+
+    // optional .mesos.ContainerInfo.MesosInfo mesos = 4;
+    /**
+     * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+     */
+    boolean hasMesos();
+    /**
+     * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+     */
+    org.apache.mesos.Protos.ContainerInfo.MesosInfo getMesos();
+    /**
+     * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+     */
+    org.apache.mesos.Protos.ContainerInfo.MesosInfoOrBuilder getMesosOrBuilder();
   }
   /**
    * Protobuf type {@code mesosphere.marathon.ExtendedContainerInfo}
@@ -13810,6 +13824,19 @@ public final class Protos {
                 docker_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000002;
+              break;
+            }
+            case 34: {
+              org.apache.mesos.Protos.ContainerInfo.MesosInfo.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = mesos_.toBuilder();
+              }
+              mesos_ = input.readMessage(org.apache.mesos.Protos.ContainerInfo.MesosInfo.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(mesos_);
+                mesos_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
               break;
             }
           }
@@ -16382,10 +16409,33 @@ public final class Protos {
       return docker_;
     }
 
+    // optional .mesos.ContainerInfo.MesosInfo mesos = 4;
+    public static final int MESOS_FIELD_NUMBER = 4;
+    private org.apache.mesos.Protos.ContainerInfo.MesosInfo mesos_;
+    /**
+     * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+     */
+    public boolean hasMesos() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+     */
+    public org.apache.mesos.Protos.ContainerInfo.MesosInfo getMesos() {
+      return mesos_;
+    }
+    /**
+     * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+     */
+    public org.apache.mesos.Protos.ContainerInfo.MesosInfoOrBuilder getMesosOrBuilder() {
+      return mesos_;
+    }
+
     private void initFields() {
       type_ = org.apache.mesos.Protos.ContainerInfo.Type.DOCKER;
       volumes_ = java.util.Collections.emptyList();
       docker_ = mesosphere.marathon.Protos.ExtendedContainerInfo.DockerInfo.getDefaultInstance();
+      mesos_ = org.apache.mesos.Protos.ContainerInfo.MesosInfo.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -16408,6 +16458,12 @@ public final class Protos {
           return false;
         }
       }
+      if (hasMesos()) {
+        if (!getMesos().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -16423,6 +16479,9 @@ public final class Protos {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(3, docker_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(4, mesos_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -16444,6 +16503,10 @@ public final class Protos {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, docker_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, mesos_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -16560,6 +16623,7 @@ public final class Protos {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getVolumesFieldBuilder();
           getDockerFieldBuilder();
+          getMesosFieldBuilder();
         }
       }
       private static Builder create() {
@@ -16582,6 +16646,12 @@ public final class Protos {
           dockerBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
+        if (mesosBuilder_ == null) {
+          mesos_ = org.apache.mesos.Protos.ContainerInfo.MesosInfo.getDefaultInstance();
+        } else {
+          mesosBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -16631,6 +16701,14 @@ public final class Protos {
         } else {
           result.docker_ = dockerBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (mesosBuilder_ == null) {
+          result.mesos_ = mesos_;
+        } else {
+          result.mesos_ = mesosBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -16679,6 +16757,9 @@ public final class Protos {
         if (other.hasDocker()) {
           mergeDocker(other.getDocker());
         }
+        if (other.hasMesos()) {
+          mergeMesos(other.getMesos());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -16696,6 +16777,12 @@ public final class Protos {
         }
         if (hasDocker()) {
           if (!getDocker().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasMesos()) {
+          if (!getMesos().isInitialized()) {
             
             return false;
           }
@@ -17113,6 +17200,123 @@ public final class Protos {
           docker_ = null;
         }
         return dockerBuilder_;
+      }
+
+      // optional .mesos.ContainerInfo.MesosInfo mesos = 4;
+      private org.apache.mesos.Protos.ContainerInfo.MesosInfo mesos_ = org.apache.mesos.Protos.ContainerInfo.MesosInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          org.apache.mesos.Protos.ContainerInfo.MesosInfo, org.apache.mesos.Protos.ContainerInfo.MesosInfo.Builder, org.apache.mesos.Protos.ContainerInfo.MesosInfoOrBuilder> mesosBuilder_;
+      /**
+       * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+       */
+      public boolean hasMesos() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+       */
+      public org.apache.mesos.Protos.ContainerInfo.MesosInfo getMesos() {
+        if (mesosBuilder_ == null) {
+          return mesos_;
+        } else {
+          return mesosBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+       */
+      public Builder setMesos(org.apache.mesos.Protos.ContainerInfo.MesosInfo value) {
+        if (mesosBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          mesos_ = value;
+          onChanged();
+        } else {
+          mesosBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+       */
+      public Builder setMesos(
+          org.apache.mesos.Protos.ContainerInfo.MesosInfo.Builder builderForValue) {
+        if (mesosBuilder_ == null) {
+          mesos_ = builderForValue.build();
+          onChanged();
+        } else {
+          mesosBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+       */
+      public Builder mergeMesos(org.apache.mesos.Protos.ContainerInfo.MesosInfo value) {
+        if (mesosBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              mesos_ != org.apache.mesos.Protos.ContainerInfo.MesosInfo.getDefaultInstance()) {
+            mesos_ =
+              org.apache.mesos.Protos.ContainerInfo.MesosInfo.newBuilder(mesos_).mergeFrom(value).buildPartial();
+          } else {
+            mesos_ = value;
+          }
+          onChanged();
+        } else {
+          mesosBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+       */
+      public Builder clearMesos() {
+        if (mesosBuilder_ == null) {
+          mesos_ = org.apache.mesos.Protos.ContainerInfo.MesosInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          mesosBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+       */
+      public org.apache.mesos.Protos.ContainerInfo.MesosInfo.Builder getMesosBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getMesosFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+       */
+      public org.apache.mesos.Protos.ContainerInfo.MesosInfoOrBuilder getMesosOrBuilder() {
+        if (mesosBuilder_ != null) {
+          return mesosBuilder_.getMessageOrBuilder();
+        } else {
+          return mesos_;
+        }
+      }
+      /**
+       * <code>optional .mesos.ContainerInfo.MesosInfo mesos = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          org.apache.mesos.Protos.ContainerInfo.MesosInfo, org.apache.mesos.Protos.ContainerInfo.MesosInfo.Builder, org.apache.mesos.Protos.ContainerInfo.MesosInfoOrBuilder> 
+          getMesosFieldBuilder() {
+        if (mesosBuilder_ == null) {
+          mesosBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              org.apache.mesos.Protos.ContainerInfo.MesosInfo, org.apache.mesos.Protos.ContainerInfo.MesosInfo.Builder, org.apache.mesos.Protos.ContainerInfo.MesosInfoOrBuilder>(
+                  mesos_,
+                  getParentForChildren(),
+                  isClean());
+          mesos_ = null;
+        }
+        return mesosBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:mesosphere.marathon.ExtendedContainerInfo)
@@ -23918,42 +24122,44 @@ public final class Protos {
       "esos.NetworkInfo\"M\n\013MarathonApp\022\014\n\004name\030" +
       "\001 \001(\t\0220\n\005tasks\030\002 \003(\0132!.mesosphere.marath" +
       "on.MarathonTask\"1\n\rContainerInfo\022\017\n\005imag" +
-      "e\030\001 \002(\014:\000\022\017\n\007options\030\002 \003(\014\"\237\004\n\025ExtendedC" +
+      "e\030\001 \002(\014:\000\022\017\n\007options\030\002 \003(\014\"\316\004\n\025ExtendedC" +
       "ontainerInfo\022\'\n\004type\030\001 \002(\0162\031.mesos.Conta" +
       "inerInfo.Type\022\036\n\007volumes\030\002 \003(\0132\r.mesos.V" +
       "olume\022E\n\006docker\030\003 \001(\01325.mesosphere.marat" +
-      "hon.ExtendedContainerInfo.DockerInfo\032\365\002\n" +
-      "\nDockerInfo\022\r\n\005image\030\001 \002(\t\022>\n\007network\030\002 ",
-      "\001(\0162\'.mesos.ContainerInfo.DockerInfo.Net" +
-      "work:\004HOST\022X\n\rport_mappings\030\003 \003(\0132A.meso" +
-      "sphere.marathon.ExtendedContainerInfo.Do" +
-      "ckerInfo.PortMapping\022\031\n\nprivileged\030\004 \001(\010" +
-      ":\005false\022$\n\nparameters\030\005 \003(\0132\020.mesos.Para" +
-      "meter\022\030\n\020force_pull_image\030\006 \001(\010\032c\n\013PortM" +
-      "apping\022\021\n\thost_port\030\001 \002(\r\022\026\n\016container_p" +
-      "ort\030\002 \002(\r\022\020\n\010protocol\030\003 \001(\t\022\027\n\014service_p" +
-      "ort\030d \001(\r:\0010\")\n\020EventSubscribers\022\025\n\rcall" +
-      "back_urls\030\001 \003(\t\"=\n\016StorageVersion\022\r\n\005maj",
-      "or\030\001 \002(\r\022\r\n\005minor\030\002 \002(\r\022\r\n\005patch\030\003 \002(\r\"Z" +
-      "\n\031UpgradeStrategyDefinition\022\035\n\025minimumHe" +
-      "althCapacity\030\001 \002(\001\022\036\n\023maximumOverCapacit" +
-      "y\030\002 \001(\001:\0011\"\260\001\n\017GroupDefinition\022\n\n\002id\030\001 \002" +
-      "(\t\022\017\n\007version\030\002 \002(\t\0224\n\004apps\030\003 \003(\0132&.meso" +
-      "sphere.marathon.ServiceDefinition\0224\n\006gro" +
-      "ups\030\004 \003(\0132$.mesosphere.marathon.GroupDef" +
-      "inition\022\024\n\014dependencies\030\005 \003(\t\"\245\001\n\030Deploy" +
-      "mentPlanDefinition\022\n\n\002id\030\001 \002(\t\022\017\n\007versio" +
-      "n\030\002 \002(\t\0226\n\010original\030\004 \002(\0132$.mesosphere.m",
-      "arathon.GroupDefinition\0224\n\006target\030\005 \002(\0132" +
-      "$.mesosphere.marathon.GroupDefinition\"\306\001" +
-      "\n\013TaskFailure\022\016\n\006app_id\030\001 \002(\t\022\036\n\007task_id" +
-      "\030\002 \002(\0132\r.mesos.TaskID\022\037\n\005state\030\003 \002(\0162\020.m" +
-      "esos.TaskState\022\021\n\007message\030\004 \001(\t:\000\022\016\n\004hos" +
-      "t\030\005 \001(\t:\000\022\017\n\007version\030\006 \002(\t\022\021\n\ttimestamp\030" +
-      "\007 \002(\t\022\037\n\007slaveId\030\010 \001(\0132\016.mesos.SlaveID\"T" +
-      "\n\014ZKStoreEntry\022\014\n\004name\030\001 \002(\t\022\014\n\004uuid\030\002 \002" +
-      "(\014\022\r\n\005value\030\003 \002(\014\022\031\n\ncompressed\030\004 \001(\010:\005f" +
-      "alseB\035\n\023mesosphere.marathonB\006Protos"
+      "hon.ExtendedContainerInfo.DockerInfo\022-\n\005" +
+      "mesos\030\004 \001(\0132\036.mesos.ContainerInfo.MesosI",
+      "nfo\032\365\002\n\nDockerInfo\022\r\n\005image\030\001 \002(\t\022>\n\007net" +
+      "work\030\002 \001(\0162\'.mesos.ContainerInfo.DockerI" +
+      "nfo.Network:\004HOST\022X\n\rport_mappings\030\003 \003(\013" +
+      "2A.mesosphere.marathon.ExtendedContainer" +
+      "Info.DockerInfo.PortMapping\022\031\n\nprivilege" +
+      "d\030\004 \001(\010:\005false\022$\n\nparameters\030\005 \003(\0132\020.mes" +
+      "os.Parameter\022\030\n\020force_pull_image\030\006 \001(\010\032c" +
+      "\n\013PortMapping\022\021\n\thost_port\030\001 \002(\r\022\026\n\016cont" +
+      "ainer_port\030\002 \002(\r\022\020\n\010protocol\030\003 \001(\t\022\027\n\014se" +
+      "rvice_port\030d \001(\r:\0010\")\n\020EventSubscribers\022",
+      "\025\n\rcallback_urls\030\001 \003(\t\"=\n\016StorageVersion" +
+      "\022\r\n\005major\030\001 \002(\r\022\r\n\005minor\030\002 \002(\r\022\r\n\005patch\030" +
+      "\003 \002(\r\"Z\n\031UpgradeStrategyDefinition\022\035\n\025mi" +
+      "nimumHealthCapacity\030\001 \002(\001\022\036\n\023maximumOver" +
+      "Capacity\030\002 \001(\001:\0011\"\260\001\n\017GroupDefinition\022\n\n" +
+      "\002id\030\001 \002(\t\022\017\n\007version\030\002 \002(\t\0224\n\004apps\030\003 \003(\013" +
+      "2&.mesosphere.marathon.ServiceDefinition" +
+      "\0224\n\006groups\030\004 \003(\0132$.mesosphere.marathon.G" +
+      "roupDefinition\022\024\n\014dependencies\030\005 \003(\t\"\245\001\n" +
+      "\030DeploymentPlanDefinition\022\n\n\002id\030\001 \002(\t\022\017\n",
+      "\007version\030\002 \002(\t\0226\n\010original\030\004 \002(\0132$.mesos" +
+      "phere.marathon.GroupDefinition\0224\n\006target" +
+      "\030\005 \002(\0132$.mesosphere.marathon.GroupDefini" +
+      "tion\"\306\001\n\013TaskFailure\022\016\n\006app_id\030\001 \002(\t\022\036\n\007" +
+      "task_id\030\002 \002(\0132\r.mesos.TaskID\022\037\n\005state\030\003 " +
+      "\002(\0162\020.mesos.TaskState\022\021\n\007message\030\004 \001(\t:\000" +
+      "\022\016\n\004host\030\005 \001(\t:\000\022\017\n\007version\030\006 \002(\t\022\021\n\ttim" +
+      "estamp\030\007 \002(\t\022\037\n\007slaveId\030\010 \001(\0132\016.mesos.Sl" +
+      "aveID\"T\n\014ZKStoreEntry\022\014\n\004name\030\001 \002(\t\022\014\n\004u" +
+      "uid\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\022\031\n\ncompressed\030\004",
+      " \001(\010:\005falseB\035\n\023mesosphere.marathonB\006Prot" +
+      "os"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -24019,7 +24225,7 @@ public final class Protos {
           internal_static_mesosphere_marathon_ExtendedContainerInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_mesosphere_marathon_ExtendedContainerInfo_descriptor,
-              new java.lang.String[] { "Type", "Volumes", "Docker", });
+              new java.lang.String[] { "Type", "Volumes", "Docker", "Mesos", });
           internal_static_mesosphere_marathon_ExtendedContainerInfo_DockerInfo_descriptor =
             internal_static_mesosphere_marathon_ExtendedContainerInfo_descriptor.getNestedTypes().get(0);
           internal_static_mesosphere_marathon_ExtendedContainerInfo_DockerInfo_fieldAccessorTable = new

@@ -1,16 +1,20 @@
 package mesosphere.marathon.state
 
-import scala.collection.immutable.Seq
-import scala.collection.JavaConverters._
-import scala.util.Try
 import java.lang.{ Integer => JInt }
-import org.apache.mesos.{ Protos => mesos }
+
 import mesosphere.marathon.Protos
+import org.apache.mesos.Protos.ContainerInfo
+import org.apache.mesos.{ Protos => mesosproto }
+
+import scala.collection.JavaConverters._
+import scala.collection.immutable.Seq
+import scala.util.Try
 
 case class Container(
-    `type`: mesos.ContainerInfo.Type = mesos.ContainerInfo.Type.DOCKER,
+    `type`: mesosproto.ContainerInfo.Type = mesosproto.ContainerInfo.Type.DOCKER,
     volumes: Seq[Container.Volume] = Nil,
-    docker: Option[Container.Docker] = None) {
+    docker: Option[Container.Docker] = None,
+    mesos: Option[mesosproto.ContainerInfo.MesosInfo] = None) {
 
   def toProto(): Protos.ExtendedContainerInfo = {
     val builder = Protos.ExtendedContainerInfo.newBuilder
@@ -20,11 +24,12 @@ case class Container(
     builder.build
   }
 
-  def toMesos(): mesos.ContainerInfo = {
-    val builder = mesos.ContainerInfo.newBuilder
+  def toMesos(): ContainerInfo = {
+    val builder = ContainerInfo.newBuilder
       .setType(`type`)
       .addAllVolumes(volumes.map(_.toProto).asJava)
     docker.foreach { d => builder.setDocker(d.toMesos) }
+    mesos.foreach { m => builder.setMesos(m) }
     builder.build
   }
 }
@@ -44,9 +49,9 @@ object Container {
     * Lossy conversion for backwards compatibility with deprecated
     * container representation.
     */
-  def apply(proto: mesos.CommandInfo.ContainerInfo): Container =
+  def apply(proto: mesosproto.CommandInfo.ContainerInfo): Container =
     Container(
-      `type` = mesos.ContainerInfo.Type.DOCKER,
+      `type` = mesosproto.ContainerInfo.Type.DOCKER,
       docker = Some(Docker(proto.getImage))
     )
 
@@ -56,7 +61,7 @@ object Container {
     */
   def apply(proto: Protos.ContainerInfo): Container =
     Container(
-      `type` = mesos.ContainerInfo.Type.DOCKER,
+      `type` = mesosproto.ContainerInfo.Type.DOCKER,
       docker = Some(Docker(proto.getImage.toStringUtf8))
     )
 
@@ -68,9 +73,9 @@ object Container {
   case class Volume(
       containerPath: String,
       hostPath: String,
-      mode: mesos.Volume.Mode) {
-    def toProto(): mesos.Volume =
-      mesos.Volume.newBuilder
+      mode: mesosproto.Volume.Mode) {
+    def toProto(): mesosproto.Volume =
+      mesosproto.Volume.newBuilder
         .setContainerPath(containerPath)
         .setHostPath(hostPath)
         .setMode(mode)
@@ -78,7 +83,7 @@ object Container {
   }
 
   object Volume {
-    def apply(proto: mesos.Volume): Volume =
+    def apply(proto: mesosproto.Volume): Volume =
       Volume(
         containerPath = proto.getContainerPath,
         hostPath = Option(proto.getHostPath).getOrElse(""),
@@ -91,7 +96,7 @@ object Container {
     */
   case class Docker(
       image: String = "",
-      network: Option[mesos.ContainerInfo.DockerInfo.Network] = None,
+      network: Option[mesosproto.ContainerInfo.DockerInfo.Network] = None,
       portMappings: Option[Seq[Docker.PortMapping]] = None,
       privileged: Boolean = false,
       parameters: Seq[Parameter] = Nil,
@@ -117,8 +122,8 @@ object Container {
       builder.build
     }
 
-    def toMesos(): mesos.ContainerInfo.DockerInfo = {
-      val builder = mesos.ContainerInfo.DockerInfo.newBuilder
+    def toMesos(): mesosproto.ContainerInfo.DockerInfo = {
+      val builder = mesosproto.ContainerInfo.DockerInfo.newBuilder
 
       builder.setImage(image)
 
@@ -183,8 +188,8 @@ object Container {
           .build
       }
 
-      def toMesos(): mesos.ContainerInfo.DockerInfo.PortMapping = {
-        mesos.ContainerInfo.DockerInfo.PortMapping.newBuilder
+      def toMesos(): mesosproto.ContainerInfo.DockerInfo.PortMapping = {
+        mesosproto.ContainerInfo.DockerInfo.PortMapping.newBuilder
           .setContainerPort(containerPort)
           .setHostPort(hostPort)
           .setProtocol(protocol)

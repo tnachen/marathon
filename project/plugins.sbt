@@ -16,6 +16,8 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0")
 
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.7.5")
 
+addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
+
 // publishing
 
 resolvers += "Era7 maven releases" at "http://releases.era7.com.s3.amazonaws.com"
